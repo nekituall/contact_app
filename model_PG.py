@@ -17,6 +17,7 @@ def create_connection(db_name, db_user, db_password, db_host, db_port):
         print(f"The error '{e}' occurred")
     return connection
 
+
 connection = create_connection("postgres", "postgres", "wfhdhf,fr", "127.0.0.1", "5432")
 
 

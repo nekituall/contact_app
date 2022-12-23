@@ -1,25 +1,26 @@
 
+import model_SQLlite as sql
 
 def menu(login):
     """main menu func"""
     print(f"welcome {login}")
-    var = int(input("Here are available commands: \n 1. Modify contacts \n 2. List my contacts \n 3. Sort by \n"
+    var = int(input("Here are available commands: \n 1. Add contacts \n 2. List my contacts \n 3. Sort by \n"
                    " 4. Filter by \n 5. Search by name \n 6. Exit \n\n Enter command number:  "))
     while True:
         if var == 1:
-            modify()
+            add_contact(login)
             break
         elif var == 2:
-            list_all()
+            list_all(login)
             break
         elif var == 3:
-            sort_by()
+            sort_by(login)
             break
         elif var == 4:
-            filter_by()
+            filter_by(login)
             break
         elif var == 5:
-            search_by_name()
+            search_by_name(login)
             break
         elif var == 6:
             break
@@ -38,23 +39,30 @@ def menu(login):
 #     print("end of menu")
 
 
-def modify():
-    var = int(input("Here are available commands: \n 1. Add  \n 2. Modify \n 3. Delete "))
-    while True:
-        if var == 1:
-            add_contact(user)
-            break
-        elif var == 2:
-            modify_contact(user)
-            break
-        elif var == 3:
-            del_contact(user)
-            break
-        else:
-            print("No such command! Re-enter")
-
-
-
+def add_contact(login):
+    "Function to add contact into DB, no checks for input data"
+    try:
+        while True:
+            print("Please fill in contact info:")
+            surname = input("Type in Surname:  ")
+            name = input("Type in Name:  ")
+            secname = input("Type in Second name:  ")
+            company = input("Type in company name:  ")
+            job = input("Type in job:  ")
+            email = input("Type in email:  ")
+            tel = input("Type in phone number:  ")
+            contact = [surname, name, secname, company, job, email, tel, "valid", login]
+            choice = input(f"{contact} \nis this info correct? yes/no:     ")
+            if choice == "yes" or choice == "y":
+                sql.insert_contact(contact)
+                print("Contact has been added")
+                add = input("Add more contact? yes/no:      ")
+                if add != "yes" or "y":
+                    break
+            else:
+                print('Okay, Let`s try again')
+    except Exception as e:
+        print(f"{e} occured")
 
 
 def case():
