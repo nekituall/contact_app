@@ -22,12 +22,38 @@ def create_db():
       email TEXT NOT NULL,
       phone TEXT NOT NULL,
       active TEXT NOT NULL,
-      user TEXT NOT NULL
+      login TEXT NOT NULL
     )
     """)
 
     con.commit()
     con.close()
+
+
+def add_contact(user):
+    "Function to add contact into DB, no checks for input data"
+    try:
+        while True:
+            print("Please fill in contact info:")
+            surname = input("Type in Surname:  ")
+            name = input("Type in Name:  ")
+            secname = input("Type in Second name:  ")
+            company = input("Type in company name:  ")
+            job = input("Type in job:  ")
+            email = input("Type in email:  ")
+            tel = input("Type in phone number:  ")
+            contact = [surname, name, secname, company, job, email, tel, "valid", user]
+            choice = input(f"{contact} \nis this info correct? yes/no:     ")
+            if choice == "yes" or choice == "y":
+                insert_contact(contact)
+                print("Contact has been added")
+                add = input("Add more contact? yes/no:      ")
+                if add != "yes" or "y":
+                    break
+            else:
+                print('Okay, Let`s try again')
+    except Exception as e:
+        print(f"{e} occured")
 
 
 def insert_contact(contact):
@@ -61,6 +87,8 @@ def select_del():
     con = sqlite3.connect("connect_app.db")
     cur = con.cursor()
     cur.execute(f"SELECT * FROM contacts WHERE active = 'invalid'")
+    res = cur.fetchall()
+    print(res)
     con.commit()
     con.close()
 
@@ -71,12 +99,18 @@ def select_all(user):
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
         cur.execute(f"SELECT * FROM contacts WHERE login = '{user}'")
+        res = cur.fetchall()
+        for i in res:
+            print(i)
         con.commit()
         con.close()
     else:
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
         cur.execute("SELECT * FROM contacts")
+        res = cur.fetchall()
+        for i in res:
+            print(i)
         con.commit()
         con.close()
 
@@ -85,41 +119,52 @@ def order_by(user):
     """This is sor function for select"""
     var = int(input("You have requested sort function. Here are available columns :\n 1. Surname\n 2. Name\n 3. Second name\n"
                 " 4. Company\n 5. Job\n 6. Email\n 7. Phone\n\nEnter column number:   "))
-    if var == 1:
-        col = "surname"
-    elif var == 2:
-        col = "name"
-    elif var == 3:
-        col = "secname"
-    elif var == 4:
-        col = "company"
-    elif var == 5:
-        col = "job"
-    elif var == 6:
-        col = "email"
-    elif var == 7:
-        col = "phone"
-    else:
-        print("Invalid column")
+
+
+    def data(var):
+        if var == 1:
+            col = "surname"
+        elif var == 2:
+            col = "name"
+        elif var == 3:
+            col = "secname"
+        elif var == 4:
+            col = "company"
+        elif var == 5:
+            col = "job"
+        elif var == 6:
+            col = "email"
+        elif var == 7:
+            col = "phone"
+        else:
+            print("Invalid column")
+        return col
+
     if user != "admin":
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
-        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}' ORDER BY {var}")
+        col = data(var)
+        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}' ORDER BY {col}")
+        res = cur.fetchall()
+        for i in res:
+            print(i)
         con.commit()
         con.close()
     else:
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
+        data(var)
         cur.execute(f"SELECT * FROM contacts ORDER BY {var}")
+        res = cur.fetchall()
+        for i in res:
+            print(i)
         con.commit()
         con.close()
 
 
-user = "vasya"
-order_by(user)
-
-def filter_by():
-    pass
+# create_db()
+# user = "vasya"
+# order_by(user)
 
 
 def search_name():
