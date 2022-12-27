@@ -20,9 +20,9 @@ def menu(user):
         elif var == 4:                #Допилить функцию фильтрации
             sql.select_where(user)
             break
-        # elif var == 5:
-        #     search_by_name(user)    #Допилить функцию поиска
-        #     break
+        elif var == 5:
+            # search_by_name(user)    #Допилить функцию поиска
+            break
         elif var == 6:
             break
         else:
@@ -38,8 +38,6 @@ def case():
         exit()
     else:
         menu(user)
-
-
 
 
 if __name__ == '__main__':
