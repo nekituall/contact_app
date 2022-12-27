@@ -65,11 +65,11 @@ def insert_contact(contact):
     con.close()
 
 
-def update_contact(contact, arg1, arg2):
+def update_contact(contact, arg1, arg2):   #Допилить
     """Modify selected contact on cases in args"""
     con = sqlite3.connect("connect_app.db")
     cur = con.cursor()
-    cur.execute(f"UPDATE contacts SET {arg1} WHERE {arg2}")
+    cur.execute(f"UPDATE contacts SET {arg1} WHERE {arg2};")
     con.commit()
     con.close()
 
@@ -77,7 +77,7 @@ def delete_contact(contact):
     """Make selected contact invalid for listing"""
     con = sqlite3.connect("connect_app.db")
     cur = con.cursor()
-    cur.execute(f"UPDATE contacts SET active = 'invalid' WHERE {contact}")
+    cur.execute(f"UPDATE contacts SET active = 'invalid' WHERE {contact};")
     con.commit()
     con.close()
 
@@ -98,7 +98,7 @@ def select_all(user):
     if user != "admin":
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
-        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}'")
+        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}';")
         res = cur.fetchall()
         for i in res:
             print(i)
@@ -107,7 +107,7 @@ def select_all(user):
     else:
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
-        cur.execute("SELECT * FROM contacts")
+        cur.execute("SELECT * FROM contacts;")
         res = cur.fetchall()
         for i in res:
             print(i)
@@ -116,35 +116,15 @@ def select_all(user):
 
 
 def order_by(user):
-    """This is sor function for select"""
+    """This is sort function for select"""
     var = int(input("You have requested sort function. Here are available columns :\n 1. Surname\n 2. Name\n 3. Second name\n"
                 " 4. Company\n 5. Job\n 6. Email\n 7. Phone\n\nEnter column number:   "))
-
-
-    def data(var):
-        if var == 1:
-            col = "surname"
-        elif var == 2:
-            col = "name"
-        elif var == 3:
-            col = "secname"
-        elif var == 4:
-            col = "company"
-        elif var == 5:
-            col = "job"
-        elif var == 6:
-            col = "email"
-        elif var == 7:
-            col = "phone"
-        else:
-            print("Invalid column")
-        return col
 
     if user != "admin":
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
         col = data(var)
-        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}' ORDER BY {col}")
+        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}' ORDER BY {col};")
         res = cur.fetchall()
         for i in res:
             print(i)
@@ -154,12 +134,44 @@ def order_by(user):
         con = sqlite3.connect("connect_app.db")
         cur = con.cursor()
         data(var)
-        cur.execute(f"SELECT * FROM contacts ORDER BY {var}")
+        cur.execute(f"SELECT * FROM contacts ORDER BY {var};")
         res = cur.fetchall()
         for i in res:
             print(i)
         con.commit()
         con.close()
+
+def select_where(user):
+    """This is filter function for select"""
+    var = int(
+        input("You have requested filter function. Here are available columns :\n 1. Surname\n 2. Name\n 3. Second name\n"
+              " 4. Company\n 5. Job\n 6. Email\n 7. Phone\n\nEnter column number:  "))
+    var1 = input(f"Enter text to filter selected {var} column:   ")
+
+    if user != "admin":
+        con = sqlite3.connect("connect_app.db")
+        cur = con.cursor()
+        col = data(var)
+        cur.execute(f"SELECT * FROM contacts WHERE login = '{user}' AND {col} LIKE '{var1}';")
+        res = cur.fetchall()
+        if len(res) == 0:
+            print("No such info")
+        else:
+            for i in res:
+                print(i)
+        con.commit()
+        con.close()
+    else:
+        con = sqlite3.connect("connect_app.db")
+        cur = con.cursor()
+        data(var)
+        cur.execute(f"SELECT * FROM contacts ORDER BY {var};")
+        res = cur.fetchall()
+        for i in res:
+            print(i)
+        con.commit()
+        con.close()
+
 
 
 # create_db()
@@ -169,3 +181,23 @@ def order_by(user):
 
 def search_name():
     pass
+
+def data(var):
+    """support choice func when sort and filter"""
+    if var == 1:
+        col = "surname"
+    elif var == 2:
+        col = "name"
+    elif var == 3:
+        col = "secname"
+    elif var == 4:
+        col = "company"
+    elif var == 5:
+        col = "job"
+    elif var == 6:
+        col = "email"
+    elif var == 7:
+        col = "phone"
+    else:
+        print("Invalid column")
+    return col

@@ -17,9 +17,9 @@ def menu(user):
         elif var == 3:
             sql.order_by(user)
             break
-        # elif var == 4:                #Допилить функцию фильтрации
-        #     sql.order_by(user)
-        #     break
+        elif var == 4:                #Допилить функцию фильтрации
+            sql.select_where(user)
+            break
         # elif var == 5:
         #     search_by_name(user)    #Допилить функцию поиска
         #     break
