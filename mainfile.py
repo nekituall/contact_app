@@ -1,60 +1,35 @@
+import time
 
+import model_SQLlite as sql
 
-def menu(login):
+def menu(user):
     """main menu func"""
-    print(f"welcome {login}")
-    var = int(input("Here are available commands: \n 1. Modify contacts \n 2. List my contacts \n 3. Sort by \n"
-                   " 4. Filter by \n 5. Search by name \n 6. Exit \n\n Enter command number:  "))
+    print(f"welcome {user}")
+    var = int(input("Here are available commands: \n 1. Add contacts \n 2. List my contacts \n 3. Sort by \n"
+                   " 4. Filter by \n 5. Search by name \n 6. Exit \n\nEnter command number:  "))
     while True:
         if var == 1:
-            modify()
+            sql.add_contact(user)
             break
         elif var == 2:
-            list_all()
+            sql.select_all(user)
             break
         elif var == 3:
-            sort_by()
+            sql.order_by(user)
             break
-        elif var == 4:
-            filter_by()
+        elif var == 4:                #Допилить функцию фильтрации
+            sql.select_where(user)
             break
         elif var == 5:
-            search_by_name()
+            # search_by_name(user)    #Допилить функцию поиска
             break
         elif var == 6:
             break
         else:
             print("Command not found!")
             case()
-
-    print("end of menu")
-
-
-# def menu(user):
-#     """main menu func"""
-#     print("Here is a list of available commands: \n 1. List all \n 2. Sort by \n 3. Filter by \n 4. Search by name \n "
-#           "5. Exit")
-#
-#     print("end of menu")
-
-
-def modify():
-    var = int(input("Here are available commands: \n 1. Add  \n 2. Modify \n 3. Delete "))
-    while True:
-        if var == 1:
-            add_contact(user)
-            break
-        elif var == 2:
-            modify_contact(user)
-            break
-        elif var == 3:
-            del_contact(user)
-            break
-        else:
-            print("No such command! Re-enter")
-
-
-
+    time.sleep(1)   #Увеличить для чтения
+    case()
 
 
 def case():
@@ -62,19 +37,10 @@ def case():
     if case == "yes" or case == "y":
         exit()
     else:
-        menu()
-
-
-
-
-
-
+        menu(user)
 
 
 if __name__ == '__main__':
-    login = input('Welcome to contact_app! \nPlease sign in below \nLogin:  ')
+    user = input('Welcome to contact_app! \nPlease sign in below \nLogin:  ')
     passw = input('Password:  ')
-    if login == "admin" and passw == "admin":
-        admin_menu(login)
-    else:
-        menu(login)
+    menu(user)
